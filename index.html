@@ -1,0 +1,39 @@
+<html>
+  <!-- Sample HTML document with React component that uses React-to-Redis. -->
+  <head>
+    <meta charset='utf-8' />
+  </head>
+  <body>
+    <i style='color: #AAA'>Component should mount below:</i>
+    <div id='example'></div>
+
+    <script src="https://fb.me/react-0.13.3.js"></script>
+    <script src="https://fb.me/JSXTransformer-0.13.3.js"></script>
+    <script src="/react-to-redis.js"></script>
+
+    <script type="text/jsx">
+      var App = React.createClass({
+        mixins: [ReactToRedis],
+
+        render: function () {
+          return <div>
+            <h2>
+              Hello {this.state.name}
+            </h2>
+            <p>
+              You have {this.state.value} apples.
+            </p>
+            <p>
+              <progress value={this.state.value} max="100"></progress>
+            </p>
+          </div>
+        }
+      })
+
+      React.render(
+          <App />,
+          document.getElementById('example')
+      )
+    </script>
+  </body>
+</html>
