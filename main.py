@@ -21,9 +21,9 @@ clients = []
 @asyncio.coroutine
 def redis_changes():
     # Create connection
-    connection = yield from asyncio_redis.Connection.create(host='10.0.3.44',
+    connection = yield from asyncio_redis.Connection.create(host='127.0.0.1',
                                                             port=6379)
-    connection2 = yield from asyncio_redis.Connection.create(host='10.0.3.44',
+    connection2 = yield from asyncio_redis.Connection.create(host='127.0.0.1',
                                                              port=6379)
 
     # Create subscriber.
@@ -66,7 +66,7 @@ def websocket_handler(request):
     clients.append(ws)
     ws.start(request)
 
-    connection = yield from asyncio_redis.Connection.create(host='10.0.3.44',
+    connection = yield from asyncio_redis.Connection.create(host='127.0.0.1',
                                                              port=6379)
 
     while True:
