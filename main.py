@@ -70,7 +70,12 @@ def websocket_handler(request):
                                                              port=6379)
 
     while True:
-        msg = yield from ws.receive()
+        try:
+            msg = yield from ws.receive()
+        except RuntimeError:
+            clients.remove(ws)
+            print('client disconnected')
+            break
 
         if msg.tp == aiohttp.MsgType.text:
             print(msg.data)
