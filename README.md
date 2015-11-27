@@ -22,6 +22,11 @@ Install Redis, for eg. on Ubuntu:
 sudo apt-get install redis-server
 ```
 
+Enable keyspace notifications on Redis:
+```
+redis-cli config set notify-keyspace-events KEA
+```
+
 Install library dependencies: [aiohttp]() and [asyncio_redis]():
 ```
 pip install -r requirements.text
