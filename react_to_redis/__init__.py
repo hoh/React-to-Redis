@@ -1,3 +1,6 @@
+# Copyright (c) 2016, Hugo Herter
+# All rights reserved.
+
 """
 This HTTP Server will publish all changes to Redis HSETs to connected clients
 via websockets.
