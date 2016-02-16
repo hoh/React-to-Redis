@@ -111,7 +111,7 @@ def init(loop):
     app.router.add_route('GET', '/react-to-redis.js', jsapp_handler)
 
     srv = yield from loop.create_server(app.make_handler(), **SERVE_ON)
-    print("Server started at http://{server}:{port}".format(**SERVE_ON))
+    print("Server started at http://{host}:{port}".format(**SERVE_ON))
     return srv
 
 
