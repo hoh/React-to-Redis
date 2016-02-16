@@ -10,6 +10,9 @@ import asyncio_redis
 import json
 import logging
 
+from .here import Here
+here = Here(__file__)
+
 # Enable logging
 logging.getLogger().addHandler(logging.StreamHandler())
 logging.getLogger().setLevel(logging.DEBUG)
@@ -50,13 +53,13 @@ def redis_changes():
 
 @asyncio.coroutine
 def index_handler(request):
-    text = open('index.html', 'r').read()
+    text = here.open('index.html', 'r').read()
     return web.Response(body=text.encode('utf-8'))
 
 
 @asyncio.coroutine
 def jsapp_handler(request):
-    text = open('react-to-redis.js', 'r').read()
+    text = here.open('react-to-redis.js', 'r').read()
     return web.Response(body=text.encode('utf-8'))
 
 
