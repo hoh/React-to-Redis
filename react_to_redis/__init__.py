@@ -13,6 +13,11 @@ import logging
 from .here import Here
 here = Here(__file__)
 
+# Settings
+REDIS = dict(host='127.0.0.1', port=6379)
+REDIS_KEY = 'mykey'
+SERVE_ON = dict(host='0.0.0.0', port=8088)
+
 # Enable logging
 logging.getLogger().addHandler(logging.StreamHandler())
 logging.getLogger().setLevel(logging.DEBUG)
@@ -24,10 +29,8 @@ clients = []
 @asyncio.coroutine
 def redis_changes():
     # Create connection
-    connection = yield from asyncio_redis.Connection.create(host='127.0.0.1',
-                                                            port=6379)
-    connection2 = yield from asyncio_redis.Connection.create(host='127.0.0.1',
-                                                             port=6379)
+    connection = yield from asyncio_redis.Connection.create(**REDIS)
+    connection2 = yield from asyncio_redis.Connection.create(**REDIS)
 
     # Create subscriber.
     subscriber = yield from connection.start_subscribe()
@@ -69,8 +72,7 @@ def websocket_handler(request):
     clients.append(ws)
     ws.start(request)
 
-    connection = yield from asyncio_redis.Connection.create(host='127.0.0.1',
-                                                             port=6379)
+    connection = yield from asyncio_redis.Connection.create(**REDIS)
 
     while True:
         try:
@@ -85,7 +87,7 @@ def websocket_handler(request):
             if msg.data == 'close':
                 yield from ws.close()
             else:
-                promise = yield from connection.hgetall('mykey')
+                promise = yield from connection.hgetall(REDIS_KEY)
                 value = yield from promise.asdict()
                 ws.send_str(json.dumps(value))
         elif msg.tp == aiohttp.MsgType.close:
@@ -105,9 +107,8 @@ def init(loop):
     app.router.add_route('GET', '/ws', websocket_handler)
     app.router.add_route('GET', '/react-to-redis.js', jsapp_handler)
 
-    srv = yield from loop.create_server(app.make_handler(),
-                                        '127.0.0.1', 8088)
-    print("Server started at http://127.0.0.1:8088")
+    srv = yield from loop.create_server(app.make_handler(), **SERVE_ON)
+    print("Server started at http://{server}:{port}".format(**SERVE_ON))
     return srv
 
 loop = asyncio.get_event_loop()
