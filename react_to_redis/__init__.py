@@ -111,9 +111,15 @@ def init(loop):
     print("Server started at http://{server}:{port}".format(**SERVE_ON))
     return srv
 
-loop = asyncio.get_event_loop()
-loop.run_until_complete(asyncio.gather(init(loop), redis_changes()))
-try:
-    loop.run_forever()
-except KeyboardInterrupt:
-    pass
+
+def main():
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(asyncio.gather(init(loop), redis_changes()))
+    try:
+        loop.run_forever()
+    except KeyboardInterrupt:
+        pass
+
+
+if __name__ == '__main__':
+    main()
